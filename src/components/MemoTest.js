@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { memoTestData } from "../utils";
 import { useRouter } from "next/router";
+import ReactCardFlip from "react-card-flip";
+import Modal from "./Modal";
 
 function shuffleArray(array) {
 	for (let i = array.length - 1; i > 0; i--) {
@@ -62,6 +64,7 @@ const MemoTest = () => {
 					...matchedCards,
 					...newFlippedCards,
 				]);
+				setFlippedCards([]);
 			} else {
 				setTimeout(() => {
 					setFlippedCards([]);
@@ -74,56 +77,107 @@ const MemoTest = () => {
 		return <div>Loading...</div>;
 	}
 
+	const CardWrapper = ({ children, index, card }) => {
+		return (
+			<div
+				key={`${card.id}-${index}`}
+				className={`bg-white rounded shadow p-4 ${
+					flippedCards.includes(index) ||
+					matchedCards.includes(index)
+						? ""
+						: "cursor-pointer"
+				}`}
+				onClick={() => {
+					if (
+						!flippedCards.includes(index) &&
+						!matchedCards.includes(index)
+					) {
+						handleCardClick(index);
+					}
+				}}
+			>
+				{children}
+			</div>
+		);
+	};
+
 	return (
 		<div className="container mx-auto p-4">
+			<Modal isOpen={matchedCards.length === cards.length}>
+				<div className="text-center">
+					<h2 className="text-2xl font-bold mb-4 text-black">
+						Congratulations!
+					</h2>
+					<p className="mb-4 text-black">
+						You have completed the memo test
+						with a score of{" "}
+						{Math.round(
+							(gameData.pairs.length /
+								retries) *
+								100
+						)}
+						.
+					</p>
+					<button
+						className="bg-blue-500 text-white px-4 py-2 rounded"
+						onClick={() => router.push("/")}
+					>
+						Back to Home
+					</button>
+				</div>
+			</Modal>
 			<h1 className="text-2xl font-bold mb-6">
 				{gameData.title}
 			</h1>
 			<div className="grid grid-cols-6 gap-4">
 				{cards.map((card, index) => (
-					<div
+					<ReactCardFlip
 						key={`${card.id}-${index}`}
-						className={`bg-white rounded shadow p-4 ${
+						isFlipped={
 							flippedCards.includes(
 								index
 							) ||
 							matchedCards.includes(
 								index
 							)
-								? ""
-								: "cursor-pointer"
-						}`}
-						onClick={() => {
-							if (
-								!flippedCards.includes(
-									index
-								) &&
-								!matchedCards.includes(
-									index
-								)
-							) {
-								handleCardClick(
-									index
-								);
-							}
-						}}
+						}
 					>
-						{flippedCards.includes(index) ||
-						matchedCards.includes(index) ? (
-							<img
-								src={card.image}
-								alt={card.id}
-							/>
-						) : (
+						<CardWrapper
+							index={index}
+							card={card}
+						>
 							<div
+								className="bg-gray-300 w-full h-full"
 								style={{
 									width: "120px",
 									height: "120px",
 								}}
-								className="bg-gray-300"
+								onClick={() => {
+									if (
+										!flippedCards.includes(
+											index
+										) &&
+										!matchedCards.includes(
+											index
+										)
+									) {
+										handleCardClick(
+											index
+										);
+									}
+								}}
 							></div>
-						)}
-					</div>
+						</CardWrapper>
+						<CardWrapper
+							index={index}
+							card={card}
+						>
+							<img
+								src={card.image}
+								alt={card.id}
+							/>
+						</CardWrapper>
+					</ReactCardFlip>
 				))}
 			</div>
 		</div>
