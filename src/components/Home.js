@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { memoTestData } from "../utils";
 import Link from "next/link";
 
+import useLocalStorage from "../hooks/useLocalStorage";
+
 const Home = () => {
+	const [memoTestScores, setMemoTestScores] = useLocalStorage(
+		"memoTestScores",
+		{}
+	);
+
 	return (
 		<div className="container mx-auto p-4">
 			<h1 className="text-2xl font-bold mb-6">
@@ -19,7 +26,16 @@ const Home = () => {
 								{game.title}
 							</h2>
 							<p className="text-gray-600">
-								Highest Score: 0
+								Highest Score:{" "}
+								{memoTestScores &&
+								memoTestScores[
+									game.id
+								]
+									? memoTestScores[
+											game
+												.id
+									  ]
+									: 0}
 							</p>
 						</div>
 						<Link href={`/game/${game.id}`}>

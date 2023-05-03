@@ -73,6 +73,29 @@ const MemoTest = () => {
 		}
 	};
 
+	useEffect(() => {
+		if (matchedCards.length === cards.length && cards.length > 0) {
+			const newScore = Math.round(
+				(gameData.pairs.length / retries) * 100
+			);
+
+			const memoTestScores =
+				JSON.parse(
+					localStorage.getItem("memoTestScores")
+				) || {};
+			const currentHighScore =
+				memoTestScores[gameData.id] || 0;
+
+			if (newScore > currentHighScore) {
+				memoTestScores[gameData.id] = newScore;
+				localStorage.setItem(
+					"memoTestScores",
+					JSON.stringify(memoTestScores)
+				);
+			}
+		}
+	}, [matchedCards, cards, gameData, retries]);
+
 	if (!gameData) {
 		return <div>Loading...</div>;
 	}
@@ -126,9 +149,17 @@ const MemoTest = () => {
 					</button>
 				</div>
 			</Modal>
-			<h1 className="text-2xl font-bold mb-6">
-				{gameData.title}
-			</h1>
+			<div className="flex justify-between mb-2">
+				<h1 className="text-2xl font-bold mb-6">
+					{gameData.title}
+				</h1>
+				<button
+					className="bg-blue-500 text-white px-4 py-2 rounded"
+					onClick={() => router.push("/")}
+				>
+					Back to Home
+				</button>
+			</div>
 			<div className="grid grid-cols-6 gap-4">
 				{cards.map((card, index) => (
 					<ReactCardFlip

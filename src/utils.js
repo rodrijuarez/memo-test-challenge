@@ -129,7 +129,6 @@ const memoTestData = [
 				id: 15,
 				image: "https://via.placeholder.com/150?text=strawberry",
 			},
-			,
 		],
 	},
 	{
@@ -143,10 +142,6 @@ const memoTestData = [
 			{
 				id: 2,
 				image: "https://via.placeholder.com/150?text=cat",
-			},
-			{
-				id: 3,
-				image: "https://via.placeholder.com/150?text=elephant",
 			},
 		],
 	},
