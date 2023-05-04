@@ -5,7 +5,7 @@ const Card = ({ card, index, onClick, isFlipped }) => {
   return (
     <ReactCardFlip key={`${card.id}-${index}`} isFlipped={isFlipped}>
       <div
-        className={`aspect-square bg-emerald-200 hover:bg-emerald-600 w-full m-w-fit h-full rounded shadow p-4 ${
+        className={`aspect-square bg-emerald-200 hover:bg-emerald-600 hover:bg-black w-full m-w-fit h-full rounded shadow p-4 ${
           isFlipped ? '' : 'cursor-pointer'
         }`}
         onClick={() => !isFlipped && onClick(index)}
