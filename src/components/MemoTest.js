@@ -142,7 +142,7 @@ const MemoTest = () => {
 		return (
 			<div
 				key={`${card.id}-${index}`}
-				className={`bg-white rounded shadow p-4 ${
+				className={`aspect-square bg-white w-full h-full rounded shadow p-4 ${
 					flippedCards.includes(index) ||
 					matchedCards.includes(index)
 						? ""
@@ -198,7 +198,8 @@ const MemoTest = () => {
 					Back to Home
 				</button>
 			</div>
-			<div className="grid grid-cols-6 gap-4">
+			<div className="grid grid-cols-6 gap-4"
+		>
 				{cards.map((card, index) => (
 					<ReactCardFlip
 						key={`${card.id}-${index}`}
@@ -214,13 +215,10 @@ const MemoTest = () => {
 						<CardWrapper
 							index={index}
 							card={card}
+
 						>
 							<div
 								className="bg-black w-full h-full"
-								style={{
-									width: "120px",
-									height: "120px",
-								}}
 								onClick={() => {
 									if (
 										!flippedCards.includes(
