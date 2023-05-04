@@ -35,28 +35,28 @@ const Home = () => {
         {memoTestGames.map((game) => (
           <div
             key={game.id}
-            className="bg-white rounded shadow p-4 flex flex-col justify-between"
+            className="bg-white rounded shadow p-4 flex flex-col justify-between h-52"
           >
             <div>
               <h2 className="text-xl font-semibold mb-2 text-black">
                 {game.attributes.title}
               </h2>
               <p className="text-gray-600">
-                Highest Score:{' '}
+                <span className="font-semibold">Highest Score:</span>{' '}
                 {memoTestScores && memoTestScores[game.id]
                   ? memoTestScores[game.id]
                   : 0}
               </p>
             </div>
-            <div>
+            <div className="flex justify-between">
               <Link href={`/game/${game.id}?newGame=true`}>
-                <p className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                <p className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mt-4">
                   Start
                 </p>
               </Link>
               {memoTestProgress[game.id] && (
                 <Link href={`/game/${game.id}`}>
-                  <p className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
+                  <p className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded mt-4">
                     Continue
                   </p>
                 </Link>

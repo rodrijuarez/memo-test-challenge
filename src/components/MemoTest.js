@@ -132,7 +132,7 @@ const MemoTest = () => {
             {Math.round((gameData.attributes.pairs.length / retries) * 100)}.
           </p>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="bg-emerald-500 text-white px-4 py-2 rounded"
             onClick={() => {
               setMemoTestProgress({
                 ...memoTestProgress,
@@ -148,7 +148,7 @@ const MemoTest = () => {
       <div className="flex justify-between mb-2">
         <h1 className="text-2xl font-bold mb-6">{gameData.attributes.title}</h1>
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="bg-emerald-500 text-white px-4 py-2 rounded"
           onClick={() => router.push('/')}
         >
           Back to Home
