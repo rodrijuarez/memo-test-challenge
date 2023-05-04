@@ -1,7 +1,64 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Installation
 
+Before you can run the project, you'll need to install the necessary dependencies. Follow these steps to get started:
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/rodrijuarez/memo-test-challenge
+```
+
+2. Navigate to the project directory:
+``` bash
+cd memo-test-challenge
+```
+
+3. Install the dependencies:
+
+```bash
+npm install
+# or
+yarn
+# or
+pnpm install
+```
+
+## Using Storybook
+
+This project uses [Storybook](https://storybook.js.org/) for developing and showcasing components in isolation. To start Storybook:
+
+```bash
+npm run storybook
+# or
+yarn storybook
+# or
+pnpm storybook
+```
+
+Storybook will start on http://localhost:6006 by default. You can create stories for your components in the *.stories.js files located alongside your component files. Learn more about writing stories in the Storybook documentation.
+
+## Creating an .env.local file
+
+This project uses environment variables to store sensitive information like API keys. To set up your environment variables, create a file called `.env.local` at the root of the project.
+
+You can use the `.env.example` file as a reference to create your own `.env.local` file. Copy the contents of the `.env.example` file and paste them into the newly created `.env.local` file. Replace the placeholder values with the actual values for each environment variable.
+
+Example:
+
+```makefile
+# .env.example
+NEXT_PUBLIC_API_KEY=your_api_key_here
+
+# .env.local
+NEXT_PUBLIC_API_KEY=myactualapikey123
+```
+
+Remember not to commit your `.env.local` file to the repository. The `.gitignore` file should already have an entry for `.env.local` to ensure it doesn't get committed accidentally.
+
+
+## Getting Started
 First, run the development server:
 
 ```bash
