@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { memoTestData } from "../utils";
 import { useRouter } from "next/router";
 import ReactCardFlip from "react-card-flip";
+import useLocalStorage from "../hooks/useLocalStorage";
 import Modal from "./Modal";
 
 function shuffleArray(array) {
@@ -14,36 +14,74 @@ function shuffleArray(array) {
 
 const MemoTest = () => {
 	const router = useRouter();
-	const { id } = router.query;
 
+	const [memoTestProgress, setMemoTestProgress] = useLocalStorage(
+		"memoTestProgress",
+		{}
+	);
+
+	const { id, newGame } = router.query;
+	const [memoTestGames, setMemoTestGames] = useState([])
 	const [gameData, setGameData] = useState(null);
 	const [cards, setCards] = useState([]);
 	const [flippedCards, setFlippedCards] = useState([]);
 	const [matchedCards, setMatchedCards] = useState([]);
 	const [retries, setRetries] = useState(0);
+	const [hasStarted, setHasStarted] = useState(false)
+
+  useEffect(() => {
+    async function fetchMemoTestGames() {
+      const response = await fetch("http://localhost:1337/api/memo-test-games");
+      const responseJSON = await response.json();
+      setMemoTestGames(responseJSON.data);
+    }
+
+    fetchMemoTestGames();
+  }, []);
 
 	useEffect(() => {
-		if (id) {
-			const game = memoTestData.find(
+		if (id && !hasStarted) {
+
+			const game = memoTestGames.find(
 				(game) => game.id === parseInt(id, 10)
 			);
-			if (game) {
 				setGameData(game);
 
+			if(memoTestProgress[id] && !newGame) {
+				const {cards, flippedCards, matchedCards, retries} = memoTestProgress[id]
+				setCards(cards)
+				setMatchedCards(matchedCards)
+				setRetries(retries)
+			setHasStarted(true)
+			} else{
+			if (game) {
 				const shuffledCards = shuffleArray([
-					...game.pairs.map((pair) => ({
+					...game.attributes.pairs.map((pair) => ({
 						...pair,
 						isFlipped: false,
 					})),
-					...game.pairs.map((pair) => ({
+					...game.attributes.pairs.map((pair) => ({
 						...pair,
 						isFlipped: false,
 					})),
 				]);
 				setCards(shuffledCards);
+			setHasStarted(true)
+			}
 			}
 		}
-	}, [id]);
+	}, [id, memoTestGames]);
+
+	useEffect(() => {
+		if (hasStarted) {
+
+		setMemoTestProgress({...memoTestProgress, [id]: {
+			matchedCards,
+			retries,
+			cards,
+		}})
+		}
+	}, [hasStarted,matchedCards, cards, retries])
 
 	const handleCardClick = (clickedCardIndex) => {
 		if (flippedCards.length === 2) return;
@@ -76,7 +114,7 @@ const MemoTest = () => {
 	useEffect(() => {
 		if (matchedCards.length === cards.length && cards.length > 0) {
 			const newScore = Math.round(
-				(gameData.pairs.length / retries) * 100
+				(gameData.attributes.pairs.length / retries) * 100
 			);
 
 			const memoTestScores =
@@ -135,7 +173,7 @@ const MemoTest = () => {
 						You have completed the memo test
 						with a score of{" "}
 						{Math.round(
-							(gameData.pairs.length /
+							(gameData.attributes.pairs.length /
 								retries) *
 								100
 						)}
@@ -151,7 +189,7 @@ const MemoTest = () => {
 			</Modal>
 			<div className="flex justify-between mb-2">
 				<h1 className="text-2xl font-bold mb-6">
-					{gameData.title}
+					{gameData.attributes.title}
 				</h1>
 				<button
 					className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -178,7 +216,7 @@ const MemoTest = () => {
 							card={card}
 						>
 							<div
-								className="bg-gray-300 w-full h-full"
+								className="bg-black w-full h-full"
 								style={{
 									width: "120px",
 									height: "120px",
@@ -197,7 +235,9 @@ const MemoTest = () => {
 										);
 									}
 								}}
-							></div>
+							>
+					<h2 className="text-2xl text-center -translate-y-1/2 relative inset-y-1/2	text-white">{index + 1}</h2>
+					</div>
 						</CardWrapper>
 						<CardWrapper
 							index={index}
