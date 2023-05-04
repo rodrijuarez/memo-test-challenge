@@ -25,7 +25,7 @@ const MemoTest = () => {
 
   useEffect(() => {
     async function fetchMemoTestGames() {
-      const response = await fetch('http://localhost:1337/api/memo-test-games')
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/memo-test-games`)
       const responseJSON = await response.json()
       setMemoTestGames(responseJSON.data)
     }
@@ -154,7 +154,7 @@ const MemoTest = () => {
           Back to Home
         </button>
       </div>
-      <div className="grid grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-6">
         {cards.map((card, index) => (
           <Card
             key={index}
